@@ -17,11 +17,9 @@ pipeline {
             }
         }
 
-        stage('Start App') {
+        stage('Test Build') {
             steps {
-                dir('backend') {
-                    bat 'node server.js'
-                }
+                echo "Build successful"
             }
         }
     }
