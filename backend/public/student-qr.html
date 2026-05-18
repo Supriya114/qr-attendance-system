@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate QR</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Generate Student QR</h2>
+
+    <input id="name" placeholder="Enter Student Name">
+
+    <button onclick="generate()">Generate QR</button>
+
+    <div id="qr"></div>
+
+    <!-- back button -->
+    <button id="backBtn" style="display:none; margin-top:10px;" onclick="goBack()">
+        Back
+    </button>
+
+</div>
+
+<script>
+
+async function generate(){
+
+    const name = document.getElementById("name").value;
+
+    const res = await fetch("/api/generate-qr/" + name);
+    const data = await res.json();
+
+    document.getElementById("qr").innerHTML =
+        `<img src="${data.qr}" width="200">`;
+
+    // show back button AFTER QR generated
+    document.getElementById("backBtn").style.display = "block";
+}
+
+function goBack(){
+    window.location.href="/dashboard";
+}
+
+</script>
+
+</body>
+</html>

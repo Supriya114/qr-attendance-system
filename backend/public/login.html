@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Login</h2>
+
+    <input id="email" placeholder="Email">
+
+    <!-- PASSWORD -->
+    <div style="position:relative;width:90%;margin:auto;">
+        <input id="password" type="password" placeholder="Password" style="width:100%;">
+        <span class="eye" onclick="toggle('password')">👁</span>
+    </div>
+
+    <button onclick="login()">Login</button>
+
+    <p>Don't have account? <a href="/">Signup</a></p>
+
+</div>
+
+<script>
+
+/* TOGGLE PASSWORD */
+function toggle(id){
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+/* LOGIN */
+async function login(){
+
+    const res = await fetch("/api/login",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            email:email.value,
+            password:password.value
+        })
+    });
+
+    const data = await res.json();
+
+    if(data.token){
+        localStorage.setItem("token",data.token);
+        window.location.href="/dashboard";
+    }
+}
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,141 @@
+
+body {
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial;
+
+    background-image: url("https://images.openai.com/static-rsc-4/llTyY6AqxY_CUbE3IGX9H1wpKtOQffl3-bLLa474O4NXoKl70VB9IiFmkgQYh2X-txf_1-8AxzfA313gAqgqqgyITLjmsjSxcH_rbjN1G9irLJhl5O34EeaMWyiWsJlPN87K5iB1EwudBvZhgJaiFzMYrF04RoAxVuo_5GpFkvE?purpose=inline");
+
+    background-size: cover;
+    background-position: center;
+}
+
+/* DARK OVERLAY */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: -1;
+}
+
+/* MAIN CARD */
+.container {
+    width: 350px;
+
+    padding: 25px;
+    border-radius: 15px;
+
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(12px);
+
+    text-align: center;
+    color: white;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* INPUT */
+input {
+    width: 90%;
+    padding: 10px;
+
+    margin: 8px 0;
+
+    border: none;
+    border-radius: 8px;
+
+    text-align: center;
+
+    outline: none;
+}
+
+/* BUTTON */
+button {
+    width: 95%;
+    padding: 10px;
+
+    margin-top: 10px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #00c6ff;
+    color: white;
+
+    cursor: pointer;
+
+    transition: 0.2s ease-in-out;
+}
+
+button:hover {
+    transform: scale(1.03);
+    opacity: 0.9;
+}
+
+/* TOP RIGHT LOGOUT (DO NOT CHANGE POSITION) */
+.topbar {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    z-index: 999;
+}
+
+.logout-btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+
+    background: red;
+    color: white;
+
+    cursor: pointer;
+}
+
+/* LINKS */
+a {
+    color: #00c6ff;
+    text-decoration: none;
+}
+
+/* PASSWORD EYE ICON */
+.eye {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #00c6ff;
+    font-size: 16px;
+}
+
+/* PASSWORD STRENGTH BAR */
+#strengthBar {
+    height: 5px;
+    width: 0%;
+    border-radius: 5px;
+
+    margin-top: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Scanner</title>
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/jsqr"></script>
+</head>
+
+<body>
+
+<div class="topbar">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+    <h2>Upload QR</h2>
+
+    <input type="file" id="file">
+
+    <p id="result"></p>
+
+    <!-- hidden until QR detected -->
+    <button id="markBtn" style="display:none;" onclick="markAttendance()">
+        Upload / Mark Attendance
+    </button>
+
+</div>
+
+<script>
+
+let scannedData = "";
+
+document.getElementById("file").addEventListener("change", function(e){
+
+    const reader = new FileReader();
+
+    reader.onload = function(){
+
+        const img = new Image();
+        img.src = reader.result;
+
+        img.onload = function(){
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            canvas.width = img.width;
+            canvas.height = img.height;
+
+            ctx.drawImage(img,0,0);
+
+            const imageData = ctx.getImageData(0,0,canvas.width,canvas.height);
+
+            const code = jsQR(imageData.data, canvas.width, canvas.height);
+
+            if(code){
+                scannedData = code.data;
+
+                document.getElementById("result").innerText =
+                    "QR Found: " + scannedData;
+
+                document.getElementById("markBtn").style.display = "block";
+            } else {
+                document.getElementById("result").innerText =
+                    "No QR detected";
+            }
+        }
+    }
+
+    reader.readAsDataURL(e.target.files[0]);
+});
+
+async function markAttendance(){
+
+    await fetch("/api/mark-attendance",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ studentName: scannedData })
+    });
+
+    alert("Attendance Marked!");
+}
+
+function logout(){
+    localStorage.removeItem("token");
+    window.location.href="/login";
+}
+
+</script>
+
+</body>
+</html>

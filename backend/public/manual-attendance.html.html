@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manual Attendance</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="topbar">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+    <h2>Manual Attendance</h2>
+
+    <input id="name" placeholder="Enter Student Name">
+
+    <button onclick="mark()">Mark Attendance</button>
+
+    <p id="msg"></p>
+
+    <button onclick="back()">Back</button>
+
+</div>
+
+<script>
+
+async function mark(){
+
+    const name = document.getElementById("name").value;
+
+    const res = await fetch("/api/mark-attendance",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({ studentName: name })
+    });
+
+    const data = await res.json();
+
+    msg.innerText = "Attendance Marked!";
+}
+
+function back(){
+    window.location.href="/dashboard";
+}
+
+function logout(){
+    localStorage.removeItem("token");
+    window.location.href="/login";
+}
+
+</script>
+
+</body>
+</html>

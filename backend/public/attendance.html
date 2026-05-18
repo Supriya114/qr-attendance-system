@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attendance</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="topbar">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+    <h2>Attendance Manager</h2>
+
+    <input id="search" placeholder="Search" onkeyup="filter()">
+
+    <table>
+        <tbody id="list"></tbody>
+    </table>
+
+    <button onclick="back()">Back</button>
+
+</div>
+
+<script>
+
+let data=[];
+
+async function load(){
+    const res=await fetch("/api/get-attendance");
+    data=await res.json();
+    render(data);
+}
+
+function render(d){
+
+    list.innerHTML="";
+
+    d.forEach(i=>{
+
+        list.innerHTML+=`
+        <tr>
+            <td><input id="${i._id}" value="${i.studentName}"></td>
+            <td>${new Date(i.date).toLocaleString()}</td>
+            <td>
+                <button onclick="edit('${i._id}')">Edit</button>
+                <button onclick="del('${i._id}')">Delete</button>
+            </td>
+        </tr>`;
+    });
+}
+
+function filter(){
+    let v=search.value.toLowerCase();
+    render(data.filter(i=>i.studentName.toLowerCase().includes(v)));
+}
+
+async function edit(id){
+    let name=document.getElementById(id).value;
+
+    await fetch("/api/update-attendance/"+id,{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({studentName:name})
+    });
+
+    load();
+}
+
+async function del(id){
+    await fetch("/api/delete-attendance/"+id,{method:"DELETE"});
+    load();
+}
+
+function back(){
+    window.location.href="/dashboard";
+}
+
+function logout(){
+    localStorage.removeItem("token");
+    window.location.href="/login";
+}
+
+load();
+
+</script>
+
+</body>
+</html>

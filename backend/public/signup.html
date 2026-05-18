@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Signup</h2>
+
+    <input id="name" placeholder="Name">
+    <input id="email" placeholder="Email">
+
+    <!-- PASSWORD -->
+    <div style="position:relative;width:90%;margin:auto;">
+        <input id="password" type="password" placeholder="Password" style="width:100%;">
+        <span class="eye" onclick="toggle('password')">👁</span>
+    </div>
+
+    <!-- CONFIRM PASSWORD -->
+    <div style="position:relative;width:90%;margin:auto;">
+        <input id="confirmPassword" type="password" placeholder="Confirm Password" style="width:100%;">
+        <span class="eye" onclick="toggle('confirmPassword')">👁</span>
+    </div>
+
+    <!-- STRENGTH -->
+    <small id="strengthText"></small>
+    <div style="background:#333;border-radius:5px;margin-top:5px;">
+        <div id="strengthBar"></div>
+    </div>
+
+    <button onclick="signup()">Signup</button>
+
+    <p>Already have account? <a href="/login">Login</a></p>
+
+</div>
+
+<script>
+
+/* TOGGLE PASSWORD */
+function toggle(id){
+    const input = document.getElementById(id);
+    input.type = input.type === "password" ? "text" : "password";
+}
+
+/* PASSWORD STRENGTH */
+password.addEventListener("input", function(){
+
+    let v = password.value;
+    let s = 0;
+
+    if(v.length >= 6) s++;
+    if(/[A-Z]/.test(v)) s++;
+    if(/[0-9]/.test(v)) s++;
+    if(/[@$!%*?&]/.test(v)) s++;
+
+    let bar = document.getElementById("strengthBar");
+    let text = document.getElementById("strengthText");
+
+    let percent = s * 25;
+    bar.style.width = percent + "%";
+
+    if(s <= 1){
+        bar.style.background = "red";
+        text.innerText = "Weak";
+    }
+    else if(s == 2){
+        bar.style.background = "orange";
+        text.innerText = "Medium";
+    }
+    else{
+        bar.style.background = "green";
+        text.innerText = "Strong";
+    }
+});
+
+/* SIGNUP */
+async function signup(){
+
+    if(password.value !== confirmPassword.value){
+        alert("Passwords do not match");
+        return;
+    }
+
+    const res = await fetch("/api/signup",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            name:name.value,
+            email:email.value,
+            password:password.value
+        })
+    });
+
+    const data = await res.json();
+
+    alert(data.message);
+
+    if(data.success){
+        window.location.href="/login";
+    }
+}
+
+</script>
+
+</body>
+</html>
